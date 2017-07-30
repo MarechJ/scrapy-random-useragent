@@ -58,7 +58,7 @@ class RandomUserAgentMiddleware(UserAgentMiddleware):
 
     def process_request(self, request, spider):
         if request.meta.get('skip_useragent'):
-            return request
+            return
 
         user_agent = random.choice(self.user_agent_list)
         if user_agent:
