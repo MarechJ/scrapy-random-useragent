@@ -37,15 +37,16 @@ Then, create a new variable ``USER_AGENT_LIST`` with the path to your
 text file which has the list of all user-agents
 (one user-agent per line).
 
-If you wish to disable the random user agent middleware on a request basis, you can us a meta flag.
-
-.. code-block:: python
-
-   scrapy.Request('https://...', callback=function, meta={'skip_useragent': True})
-
 .. code-block:: python
 
     USER_AGENT_LIST = "/path/to/useragents.txt"
 
 Now all the requests from your crawler will have a random user-agent
 picked from the text file.
+
+
+If you wish to disable the random user agent middleware on a request basis, you can us a meta flag.
+
+.. code-block:: python
+
+   scrapy.Request('https://...', callback=function, meta={'skip_useragent': True})
