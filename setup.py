@@ -21,7 +21,10 @@ def get_package_meta(meta_name):
     named in the Python meta format `__<meta_name>__`.
     """
     regex = "__{0}__ = ['\"]([^'\"]+)['\"]".format(meta_name)
-    return re.search(regex, package_file).group(1)
+    res = re.search(regex, package_file)
+    if res:
+        return res.group(1)
+    return ""
 
 
 version = get_package_meta('version')
