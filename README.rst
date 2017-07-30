@@ -45,7 +45,7 @@ Now all the requests from your crawler will have a random user-agent
 picked from the text file.
 
 
-If you wish to disable the random user agent middleware on a request basis, you can us a meta flag.
+If you wish to disable the random user agent middleware on a request basis, you can use a meta flag.
 
 .. code-block:: python
 
