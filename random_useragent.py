@@ -7,6 +7,7 @@ user-agents and sets a random one for each request.
 """
 
 import random
+from functools import lru_cache # python3 only
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 
@@ -14,10 +15,16 @@ __author__ = "Srinivasan Rangarajan"
 __copyright__ = "Copyright 2016, Srinivasan Rangarajan"
 __credits__ = ["Srinivasan Rangarajan"]
 __license__ = "MIT"
-__version__ = "0.2"
-__maintainer__ = "Srinivasan Rangarajan"
-__email__ = "srinivasanr@gmail.com"
-__status__ = "Development"
+__version__ = "0.3"
+__maintainer__ = "Julien Marechal"
+__email__ = ""
+__status__ = "Release"
+
+
+@lru_cache
+def file_get_user_agent_list(user_agent_list_file):
+    with open(user_agent_list_file, 'r') as f:
+        return [line.strip() for line in f.readlines()]
 
 
 class RandomUserAgentMiddleware(UserAgentMiddleware):
@@ -33,8 +40,9 @@ class RandomUserAgentMiddleware(UserAgentMiddleware):
             ua = settings.get('USER_AGENT', user_agent)
             self.user_agent_list = [ua]
         else:
-            with open(user_agent_list_file, 'r') as f:
-                self.user_agent_list = [line.strip() for line in f.readlines()]
+            self.user_agent_list = file_get_user_agent_list(
+                user_agent_list_file
+            )
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -44,6 +52,9 @@ class RandomUserAgentMiddleware(UserAgentMiddleware):
         return obj
 
     def process_request(self, request, spider):
+        if request.meta.get('skip_useragent'):
+            return request
+
         user_agent = random.choice(self.user_agent_list)
         if user_agent:
             request.headers.setdefault('User-Agent', user_agent)
