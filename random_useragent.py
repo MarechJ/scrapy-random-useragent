@@ -7,7 +7,12 @@ user-agents and sets a random one for each request.
 """
 
 import random
-from functools import lru_cache # python3 only
+try:
+    from functools import lru_cache  # python3 only
+except ImportError:
+    lru_cache = lambda maxsize: lambda f: f  # noqa
+
+
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 
